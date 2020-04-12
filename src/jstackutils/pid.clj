@@ -17,6 +17,12 @@
         mxbean-name (.getName mxbean)]
     (Long/parseLong (first (clojure.string/split mxbean-name #"@")))))
 
-(def pid
-  (or (try-get-pid-from-jdk9-api)
-      (get-pid-from-jmx-bean)))
+(def fallback-pid (atom nil))
+
+(defn set-pid! [pid]
+  (reset! fallback-pid pid))
+
+(let [current-pid (or (try-get-pid-from-jdk9-api)
+                      (get-pid-from-jmx-bean))]
+  (defn pid []
+    (or @fallback-pid current-pid)))

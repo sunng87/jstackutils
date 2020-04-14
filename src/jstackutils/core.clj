@@ -9,9 +9,9 @@
   (let [default-format (SimpleDateFormat. "yyyyMMddHHmmss")]
     (.format default-format (Date.))))
 
-(defn jstack [output-path output-name]
-  (let [file-full-name (str output-name "-" (time-now))
-        out-file (io/file output-path file-full-name)]
+(defn jstack [output-prefix]
+  (let [file-full-name (str output-prefix "-" (time-now))
+        out-file (io/file file-full-name)]
     (let [output (:out (shell/sh "jstack" (str (pid/pid))))]
       (spit out-file output))))
 

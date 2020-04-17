@@ -2,7 +2,8 @@
   (:require [jstackutils.pid :as pid]
             [jstackutils.parser :as parser]
             [clojure.java.io :as io]
-            [clojure.java.shell :as shell])
+            [clojure.java.shell :as shell]
+            [clojure.string :as string])
   (:import [java.text SimpleDateFormat]
            [java.util Date]))
 
@@ -33,6 +34,10 @@
         (reset! last-call-time-atom (System/currentTimeMillis))))))
 
 (defn thread-prefix-filter [thread-prefix]
-  (fn [jstack-output]
-    ;; TODO: impl
-    ))
+  (fn [parsed-output-seq]
+    (let [prefix (str "\"" thread-prefix)]
+      (filter #(let [is-trace (parser/is-thread-stacktrace %)]
+                 (if is-trace
+                   (string/starts-with? (first %) prefix)
+                   true))
+              parsed-output-seq))))

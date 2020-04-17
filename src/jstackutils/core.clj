@@ -18,6 +18,11 @@
 
         parsed-output-seq (parser/parse-stack-trace output)
 
+        parsed-output-seq (if (not-empty filters)
+                            (filter (fn [section] (every? #(% section) filters))
+                                    parsed-output-seq)
+                            parsed-output-seq)
+
         output (parser/dump-stack-trace parsed-output-seq)]
 
     (spit out-file output)))
@@ -34,10 +39,9 @@
         (reset! last-call-time-atom (System/currentTimeMillis))))))
 
 (defn thread-prefix-filter [thread-prefix]
-  (fn [parsed-output-seq]
-    (let [prefix (str "\"" thread-prefix)]
-      (filter #(let [is-trace (parser/is-thread-stacktrace %)]
-                 (if is-trace
-                   (string/starts-with? (first %) prefix)
-                   true))
-              parsed-output-seq))))
+  (let [prefix (str "\"" thread-prefix)]
+    (fn [parsed-output-section]
+      (let [is-trace (parser/is-thread-stacktrace parsed-output-section)]
+        (if is-trace
+          (string/starts-with? (first parsed-output-section) prefix)
+          true)))))

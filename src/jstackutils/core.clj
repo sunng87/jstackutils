@@ -37,11 +37,3 @@
                min-interval-ms)
         (f)
         (reset! last-call-time-atom (System/currentTimeMillis))))))
-
-(defn thread-prefix-filter [thread-prefix]
-  (let [prefix (str "\"" thread-prefix)]
-    (fn [parsed-output-section]
-      (let [is-trace (parser/is-thread-stacktrace parsed-output-section)]
-        (if is-trace
-          (string/starts-with? (first parsed-output-section) prefix)
-          true)))))

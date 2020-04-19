@@ -11,21 +11,13 @@
   (let [default-format (SimpleDateFormat. "yyyyMMddHHmmss")]
     (.format default-format (Date.))))
 
-(defn jstack [output-prefix & {:keys [filters]}]
-  (let [file-full-name (str output-prefix "-" (time-now))
-        out-file (io/file file-full-name)
-        output (:out (shell/sh "jstack" (str (pid/pid))))
-
-        parsed-output-seq (parser/parse-stack-trace output)
-
-        parsed-output-seq (if (not-empty filters)
-                            (filter (fn [section] (every? #(% section) filters))
-                                    parsed-output-seq)
-                            parsed-output-seq)
-
-        output (parser/dump-stack-trace parsed-output-seq)]
-
-    (spit out-file output)))
+(defn jstack [& {:keys [filters]}]
+  (let [output (:out (shell/sh "jstack" (str (pid/pid))))
+        parsed-output-seq (parser/parse-stack-trace output)]
+    (if (not-empty filters)
+      (filter (fn [section] (every? #(% section) filters))
+              parsed-output-seq)
+      parsed-output-seq)))
 
 (defn with-min-interval [last-call-time-atom
                          f
@@ -37,3 +29,9 @@
                min-interval-ms)
         (f)
         (reset! last-call-time-atom (System/currentTimeMillis))))))
+
+(defn dump [output-prefix jstack-output-seq]
+  (let [file-full-name (str output-prefix "-" (time-now))
+        out-file (io/file file-full-name)
+        output (parser/dump-stack-trace jstack-output-seq)]
+    (spit out-file output)))

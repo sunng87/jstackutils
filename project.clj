@@ -7,5 +7,12 @@
   :repl-options {:init-ns jstackutils.core}
 
   :profiles {:cli {:main ^:skip-aot jstackutils.main
-                   :dependencies [[org.clojure/tools.cli "1.0.194"]]}
-             :uberjar {:aot :all}})
+                   :dependencies [[org.clojure/tools.cli "1.0.194"]]
+                   :plugins [[io.taylorwood/lein-native-image "0.3.1"]]
+                   ;; NOTE add graalvm path env GRAALVM_HOME when running native-image
+                   :native-image {:jvm-opts ["-Dclojure.compiler.direct-linking=true"]
+                                  :opts ["--no-server"
+                                         "--no-fallback"
+                                         "--initialize-at-build-time"]
+                                  :name "jstackutils"}}}
+             :uberjar {:aot :all})

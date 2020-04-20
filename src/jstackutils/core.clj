@@ -15,7 +15,7 @@
   (let [pid (or pid (pid/pid))
         result (shell/sh "jstack" (str pid))]
     (if (> (:exit result) 0)
-      (throw (IllegalStateException. (:err result)))
+      (throw (IllegalStateException. ^String (:err result)))
       (let [output (:out result)
             parsed-output-seq (parser/parse-stack-trace output)]
         (if (not-empty filters)

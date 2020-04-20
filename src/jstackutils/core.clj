@@ -2,8 +2,7 @@
   (:require [jstackutils.pid :as pid]
             [jstackutils.parser :as parser]
             [clojure.java.io :as io]
-            [clojure.java.shell :as shell]
-            [clojure.string :as string])
+            [clojure.java.shell :as shell])
   (:import [java.text SimpleDateFormat]
            [java.util Date]))
 

@@ -1,4 +1,5 @@
 (ns jstackutils.pid
+  (:require [clojure.string :as string])
   (:import [java.lang.management ManagementFactory]))
 
 (defn- get-pid-from-jdk9-api []
@@ -15,7 +16,7 @@
 (defn- get-pid-from-jmx-bean []
   (let [mxbean (ManagementFactory/getRuntimeMXBean)
         mxbean-name (.getName mxbean)]
-    (Long/parseLong (first (clojure.string/split mxbean-name #"@")))))
+    (Long/parseLong (first (string/split mxbean-name #"@")))))
 
 (def fallback-pid (atom nil))
 

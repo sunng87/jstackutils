@@ -14,13 +14,13 @@
 
 (defn -main [& args]
   (try
-    (let [options (cli/parse-opts args cli-options)]
-      (let [pid (first (:arguments options))
-            output-prefix (-> options :options :output)
+    (let [options (cli/parse-opts args cli-options)
+          pid (first (:arguments options))
+          output-prefix (-> options :options :output)
 
-            jstack-results (jstk/jstack :pid pid)]
-        (if output-prefix
-          (jstk/dump output-prefix jstack-results)
-          (println (jstk/dump* jstack-results)))))
+          jstack-results (jstk/jstack :pid pid)]
+      (if output-prefix
+        (jstk/dump output-prefix jstack-results)
+        (println (jstk/dump* jstack-results))))
     (finally
       (shutdown-agents))))

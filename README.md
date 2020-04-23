@@ -1,14 +1,19 @@
 # jstackutils
 
-A Clojure library designed to ... well, that part is up to you.
+This lib/app provides you ability to customize `jstack` call both
+inside and outside your app.
+
+By default, the output of jstack is difficult for human to read. When
+you were dealing with an outage, an enhanced `jstack` will be handy for
+finding the root cause.
 
 ## Usage
 
-FIXME
+;; TODO
 
 ## License
 
-Copyright © 2020 FIXME
+Copyright © 2020 Ning Sun <sunng@pm.me>
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at

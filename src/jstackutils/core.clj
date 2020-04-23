@@ -18,8 +18,8 @@
       (let [output (:out result)
             parsed-output-seq (parser/parse-stack-trace output)]
         (if (not-empty filters)
-          (filter (fn [section] (every? #(% section) filters))
-                  parsed-output-seq)
+          (let [pred (apply every-pred filters)]
+            (filter pred parsed-output-seq))
           parsed-output-seq)))))
 
 (defn with-min-interval [last-call-time-atom

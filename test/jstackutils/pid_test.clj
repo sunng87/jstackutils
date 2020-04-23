@@ -9,4 +9,5 @@
 (deftest test-override-pid
   (testing "set custom pid when defeault pid detection not working"
     (pid/set-pid! 100)
-    (is (= (pid/pid) 100))))
+    (is (= (pid/pid) 100))
+    (pid/set-pid! nil)))

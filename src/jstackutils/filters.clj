@@ -12,5 +12,5 @@
 
 (defn stack-trace-filter [contains-package-prefix]
   (fn [parsed-output-section]
-    (any? #(string/starts-with? % contains-package-prefix)
+    (some #(string/index-of % contains-package-prefix)
           parsed-output-section)))

@@ -9,3 +9,8 @@
         (if is-trace
           (string/starts-with? (first parsed-output-section) prefix)
           true)))))
+
+(defn stack-trace-filter [contains-package-prefix]
+  (fn [parsed-output-section]
+    (any? #(string/starts-with? % contains-package-prefix)
+          parsed-output-section)))

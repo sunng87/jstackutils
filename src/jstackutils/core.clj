@@ -10,9 +10,11 @@
   (let [default-format (SimpleDateFormat. "yyyyMMddHHmmss")]
     (.format default-format (Date.))))
 
-(defn jstack [& {:keys [filters pid]}]
+(defn jstack [& {:keys [filters pid jstack-exec]
+                 :or {}}]
   (let [pid (or pid (pid/pid))
-        result (shell/sh "jstack" (str pid))]
+        jstack-exec (or jstack-exec "jstack")
+        result (shell/sh jstack-exec (str pid))]
     (if (> (:exit result) 0)
       (throw (IllegalStateException. ^String (:err result)))
       (let [output (:out result)

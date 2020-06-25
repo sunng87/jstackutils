@@ -14,3 +14,10 @@
   (fn [parsed-output-section]
     (some #(string/index-of % contains-package-prefix)
           parsed-output-section)))
+
+(defn thread-state-filter [state]
+  (let [state (format "java.lang.Thread.State: %s" (string/upper-case state))]
+    (fn [parsed-output-sections]
+      (if-let [state-line (second parsed-output-sections)]
+        (string/index-of state-line state)
+        false))))

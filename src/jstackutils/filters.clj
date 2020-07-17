@@ -10,7 +10,7 @@
           (string/starts-with? (first parsed-output-section) prefix)
           true)))))
 
-(defn stack-trace-filter [contains-package-prefix]
+(defn package-filter [contains-package-prefix]
   (fn [parsed-output-section]
     (some #(string/index-of % contains-package-prefix)
           parsed-output-section)))
